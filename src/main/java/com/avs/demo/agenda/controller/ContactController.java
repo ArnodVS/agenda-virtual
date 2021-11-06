@@ -1,7 +1,8 @@
 package com.avs.demo.agenda.controller;
 
 import com.avs.demo.agenda.model.Contact;
-import com.avs.demo.agenda.repo.ContactRepository;
+import com.avs.demo.agenda.model.repo.IContactDao;
+import com.avs.demo.agenda.model.services.IContactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,37 +19,36 @@ import java.util.List;
 public class ContactController {
 
     @Autowired
-    private ContactRepository contactRepository;
+    private IContactService contactService;
 
-    @GetMapping("")
-    public String read(Model model){
-        List<Contact> contacts = contactRepository.findAll();
+    @GetMapping("/list")
+    public String getAll(Model model){
+        List<Contact> contacts = contactService.getAll();
         model.addAttribute("contacts", contacts);
-        return "index";
+        return "list";
     }
 
     @GetMapping("/form")
-    public String register(Model model){
+    public String create(Model model){
         model.addAttribute("title","Registrar nuevo contacto");
         model.addAttribute("contact", new Contact());
         return "form";
     }
 
     @PostMapping("/form")
-    public String create(@Validated Contact contact, BindingResult result,
-                         Model model, RedirectAttributes flash){
+    public String save(@Validated Contact contact, BindingResult result, Model model, RedirectAttributes flash){
         if(result.hasErrors()){
             model.addAttribute("contact", contact);
             return "form";
         }
-        contactRepository.save(contact);
+        contactService.save(contact);
         flash.addFlashAttribute("successMsg", "El contacto ha sido creado correctamente!");
-        return "redirect:/";
+        return "redirect:/list";
     }
 
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable Integer id, Model model){
-        Contact contact = contactRepository.getById(id);
+        Contact contact = contactService.getById(id);
         model.addAttribute("title","Editar contacto");
         model.addAttribute("contact", contact);
         return "form";
@@ -57,28 +57,26 @@ public class ContactController {
     @PostMapping("/{id}/edit")
     public String update(@PathVariable Integer id, @Validated Contact contact,
                          BindingResult result, Model model, RedirectAttributes flash){
-        Contact contactDB = contactRepository.getById(id);
+        Contact contactDB = contactService.getById(id);
         if(result.hasErrors()){
             model.addAttribute("contact", contact);
             return "form";
         }
-        // service
         contactDB.setName(contact.getName());
         contactDB.setPhone(contact.getPhone());
         contactDB.setEmail(contact.getEmail());
         contactDB.setDateBirth(contact.getDateBirth());
-
-        contactRepository.save(contactDB);
+        contactService.save(contactDB);
         flash.addFlashAttribute("successMsg", "El contacto ha sido actualizado correctamente!");
-        return "redirect:/";
+        return "redirect:/list";
     }
 
     @PostMapping("/{id}/delete")
     public String delete(@PathVariable Integer id, RedirectAttributes flash){
-        Contact contact = contactRepository.getById(id);
-        contactRepository.delete(contact);
+        Contact contact = contactService.getById(id);
+        contactService.delete(contact);
         flash.addFlashAttribute("successMsg","El contacto ha sido eliminado.");
-        return "redirect:/";
+        return "redirect:/list";
     }
 
 }

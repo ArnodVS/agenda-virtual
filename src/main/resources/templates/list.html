@@ -1,29 +1,19 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="Thymeleaf.org">
-
 <head th:replace="layout/layout :: head"></head>
-
 <body>
-
     <header	th:replace="layout/layout :: header"></header>
-
     <div class="container">
-        <!-- Alert-->
         <div th:if="${successMsg ne null}" class="alert alert-success alert-dismissible">
             [[${successMsg}]]
             <button class="btn btn-close" data-ds-dismiss="alert"></button>
         </div>
-
         <h3>Mi lista de Contactos</h3>
-
-        <!-- boton-->
         <div class="text-center my-3">
             <a href="/form" class="btn btn-success">
                 Nuevo contacto
             </a>
         </div>
-
-        <!-- Inicio de Tabla-->
         <table class="table table-hover">
             <thead>
             <tr>
@@ -50,29 +40,19 @@
                     <a href="#" onclick="contactDelete(this)" class="btn btn-sm btn-danger">
                         Eliminar
                     </a>
-
                     <form th:action="@{/{id}/delete(id=${contact.id})}" method="post"></form>
-
                 </td>
-
             </tr>
         </table>
-        <!-- Fin de Tabla-->
     </div>
-
     <script>
-
         function contactDelete(elem){
             var ok = confirm('¿Estás seguro de eliminar a este contacto?');
             if(ok) {
                 elem.nextElementSibling.submit();
             }
         }
-
     </script>
-
     <footer	th:replace="layout/layout :: footer"></footer>
-
 </body>
-
 </html>

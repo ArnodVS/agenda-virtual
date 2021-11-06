@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Table(name="contacts")
 @Data
 public class Contact {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -26,11 +27,14 @@ public class Contact {
     @Email
     private String email;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    @PastOrPresent
     @NotNull
+    @PastOrPresent
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @Column(name = "date_birth")
     private LocalDate dateBirth;
 
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @Column(name = "date_register")
     private LocalDateTime dateRegister;
 
     @PrePersist

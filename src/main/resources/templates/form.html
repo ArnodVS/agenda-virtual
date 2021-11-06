@@ -1,20 +1,12 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-
 <head th:replace="layout/layout :: head"></head>
-
 <body>
-
     <header	th:replace="layout/layout :: header"></header>
-
     <div class="container py-4">
         <div class="row justify-content-center">
-            <!-- Responsive -->
             <div class="col-md-6 col-lg-4">
-
                 <h3 th:text="${title}"></h3>
-
-                <!-- Inicio de formulario-->
                 <form th:action="@{/form}" method="post" th:object="${contact}">
                     <div class="mb-3">
                         <label for="name">Nombre</label>
@@ -36,24 +28,18 @@
                         <input id="dateBirth" type="date" th:field="*{dateBirth}" class="form-control" th:errorclass="is-invalid">
                         <div th:if="${#fields.hasErrors('dateBirth')}" th:errors="*{dateBirth}" class="invalid-feedback"></div>
                     </div>
-
                     <div class="text-end">
                         <button class="btn btn-primary">
                             Guardar
                         </button>
-                        <a href="/" class="btn btn-light ms-2">
+                        <a href="/list" class="btn btn-light ms-2">
                             Cancelar
                         </a>
                     </div>
-
                 </form>
-                <!-- Fin de formulario-->
             </div>
-            <!-- Responsive end -->
         </div>
     </div>
-
     <footer	th:replace="layout/layout :: footer"></footer>
-
 </body>
 </html>
